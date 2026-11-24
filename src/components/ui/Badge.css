@@ -26,4 +26,10 @@
     background-color: var(--danger);
     border-color: var(--danger);
   }
+
+  &.success {
+    color: var(--background);
+    background-color: var(--success);
+    border-color: var(--success);
+  }
 }
