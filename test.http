@@ -1,0 +1,40 @@
+# API
+
+@apiUrl = http://localhost:3001
+@resource = tasks
+@id = 7
+
+# Example Task Data
+# {
+#   "title": "Comprare il latte",
+#   "description": "Supermercato sotto casa",
+#   "status": "To do",
+#   "id": 1,
+#   "createdAt": "2026-11-24T08:05:06.234Z"
+# }
+
+### Get all tasks
+GET {{apiUrl}}/{{resource}}
+
+### Create a new task
+POST {{apiUrl}}/{{resource}}
+Content-Type: application/json
+
+{
+  "title": "New Task",
+  "description": "Task description",
+  "status": "To do"
+}
+
+### Update a task
+PUT {{apiUrl}}/{{resource}}/{{id}}
+Content-Type: application/json
+
+{
+  "title": "Updated Task",
+  "description": "Updated description",
+  "status": "Doing"
+}
+
+### Delete a task
+DELETE {{apiUrl}}/{{resource}}/{{id}}
