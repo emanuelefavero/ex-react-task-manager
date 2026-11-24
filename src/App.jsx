@@ -1,9 +1,25 @@
+import { BrowserRouter, Route, Routes } from 'react-router';
+import { AddTask } from './pages/AddTask';
+import { TaskList } from './pages/TaskList';
+import { RootLayout } from './RootLayout';
+import { PATHS } from './router/paths';
 import './App.css';
+
+const providers = [BrowserRouter, Routes];
+
+const Nest = ({ providers, children }) =>
+  providers.reduceRight(
+    (nested, Provider) => <Provider>{nested}</Provider>,
+    children,
+  );
 
 export const App = () => {
   return (
-    <main className='container'>
-      <h1>Task Manager Avanzato</h1>
-    </main>
+    <Nest providers={providers}>
+      <Route path={PATHS.HOME} element={<RootLayout />}>
+        <Route index element={<TaskList />} />
+        <Route path={PATHS.ADD_TASK} element={<AddTask />} />
+      </Route>
+    </Nest>
   );
 };
