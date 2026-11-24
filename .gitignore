@@ -30,3 +30,7 @@ dist-ssr
 
 # Local files
 .local/
+
+# Env
+.env*
+!.env.example

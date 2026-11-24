@@ -4,8 +4,9 @@ import { TaskList } from './pages/TaskList';
 import { RootLayout } from './RootLayout';
 import { PATHS } from './router/paths';
 import './App.css';
+import { GlobalContextProvider } from './context/GlobalContextProvider';
 
-const providers = [BrowserRouter, Routes];
+const providers = [GlobalContextProvider, BrowserRouter, Routes];
 
 const Nest = ({ providers, children }) =>
   providers.reduceRight(
