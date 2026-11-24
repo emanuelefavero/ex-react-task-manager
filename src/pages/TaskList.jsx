@@ -1,7 +1,13 @@
+import { useDocumentTitle } from '@/hooks/useDocumentTitle';
+
+const PAGE_TITLE = `Task List`;
+
 export const TaskList = () => {
+  useDocumentTitle();
+
   return (
     <>
-      <h1>Task List</h1>
+      <h1>{PAGE_TITLE}</h1>
     </>
   );
 };
