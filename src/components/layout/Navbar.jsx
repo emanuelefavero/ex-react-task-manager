@@ -4,7 +4,7 @@ import './Navbar.css';
 
 export const Navbar = ({ logo, navLinks = [] }) => {
   return (
-    <div className='navbar'>
+    <nav className='navbar'>
       <div className='logo'>{logo}</div>
 
       {navLinks.length > 0 && (
@@ -23,6 +23,6 @@ export const Navbar = ({ logo, navLinks = [] }) => {
           ))}
         </ul>
       )}
-    </div>
+    </nav>
   );
 };
