@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import { API_URL } from '@/config/env';
-import { fetchJson } from '@/lib/api';
+import { fetchTasks } from '@/lib/api';
 import { GlobalContext } from './GlobalContext';
 
 const INITIAL_TASKS = { step: 'idle' };
@@ -11,10 +10,10 @@ export const GlobalContextProvider = ({ children }) => {
   useEffect(() => {
     let ignore = false;
 
-    const fetchTasks = async () => {
+    const loadTasks = async () => {
       try {
         setTasks({ step: 'loading' });
-        const data = await fetchJson(`${API_URL}/tasks`);
+        const data = await fetchTasks();
 
         if (ignore) return;
 
@@ -30,7 +29,7 @@ export const GlobalContextProvider = ({ children }) => {
       }
     };
 
-    fetchTasks();
+    loadTasks();
 
     return () => {
       ignore = true;
