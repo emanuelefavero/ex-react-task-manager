@@ -1,6 +1,7 @@
 import { memo } from 'react';
 import { Badge } from '@/components/ui/Badge';
 import { formatDate } from '@/lib/date';
+import './TaskRow.css';
 
 const statusBadgeVariant = {
   'To do': Badge.variant.danger,
@@ -11,7 +12,7 @@ const statusBadgeVariant = {
 export const TaskRow = memo(
   ({ title, status, createdAt }) =>
     title && (
-      <tr>
+      <tr className='task-row'>
         <td>{title}</td>
         <td>
           <Badge variant={statusBadgeVariant[status] ?? Badge.variant.default}>

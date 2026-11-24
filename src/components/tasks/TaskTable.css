@@ -1,0 +1,21 @@
+.task-table {
+  inline-size: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+
+  :is(th, td) {
+    padding: 0.75rem clamp(0.75rem, 2vw, 1rem);
+    text-align: start;
+
+    &:not(:first-child) {
+      inline-size: 1%;
+      white-space: nowrap;
+    }
+  }
+
+  th {
+    background-color: var(--background-muted);
+    border-bottom: 1px solid var(--border);
+    font-weight: 600;
+  }
+}

@@ -8,8 +8,8 @@ const COPYRIGHT_YEAR = new Date().getFullYear();
 
 export const RootLayout = () => {
   return (
-    <>
-      <header className='container'>
+    <div className='app-layout'>
+      <header>
         <Navbar logo={APP_NAME} navLinks={NAV_LINKS} />
       </header>
 
@@ -28,6 +28,6 @@ export const RootLayout = () => {
           {APP_AUTHOR}
         </a>
       </footer>
-    </>
+    </div>
   );
 };

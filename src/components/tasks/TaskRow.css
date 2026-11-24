@@ -1,0 +1,18 @@
+.task-row {
+  & + .task-row {
+    border-top: 1px solid var(--border);
+  }
+
+  &:hover {
+    background-color: var(--background-muted);
+  }
+
+  > :first-child {
+    font-weight: 500;
+    overflow-wrap: anywhere;
+  }
+
+  > :last-child {
+    font-variant-numeric: tabular-nums;
+  }
+}

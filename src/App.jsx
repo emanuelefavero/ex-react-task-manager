@@ -1,10 +1,9 @@
 import { BrowserRouter, Route, Routes } from 'react-router';
+import { GlobalContextProvider } from './context/GlobalContextProvider';
 import { AddTask } from './pages/AddTask';
 import { TaskList } from './pages/TaskList';
 import { RootLayout } from './RootLayout';
 import { PATHS } from './router/paths';
-import './App.css';
-import { GlobalContextProvider } from './context/GlobalContextProvider';
 
 const providers = [GlobalContextProvider, BrowserRouter, Routes];
 

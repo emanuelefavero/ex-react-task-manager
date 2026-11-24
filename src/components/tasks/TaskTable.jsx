@@ -1,13 +1,14 @@
 import { TaskRow } from './TaskRow';
+import './TaskTable.css';
 
 export const TaskTable = ({ tasks }) =>
   tasks?.length > 0 && (
-    <table>
+    <table className='task-table'>
       <thead>
         <tr>
-          <th>Task</th>
-          <th>Status</th>
-          <th>Created At</th>
+          <th scope='col'>Task</th>
+          <th scope='col'>Status</th>
+          <th scope='col'>Created At</th>
         </tr>
       </thead>
       <tbody>

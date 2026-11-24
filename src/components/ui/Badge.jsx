@@ -1,6 +1,5 @@
 import { cx } from '@/lib/utils';
 import './Badge.css';
-import { success } from 'zod';
 
 const badgeVariant = Object.freeze({
   default: 'default',

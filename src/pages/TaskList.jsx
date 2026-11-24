@@ -1,7 +1,9 @@
 import { TaskTable } from '@/components/tasks/TaskTable';
+import { Card } from '@/components/ui/Card';
 import { Spinner } from '@/components/ui/Spinner';
 import { useGlobalContext } from '@/context/GlobalContext';
 import { useDocumentTitle } from '@/hooks/useDocumentTitle';
+import './TaskList.css';
 
 const PAGE_TITLE = `Task List`;
 
@@ -32,7 +34,7 @@ export const TaskList = () => {
   return (
     <>
       <h1>{PAGE_TITLE}</h1>
-      {renderTasks(tasks)}
+      <Card className='task-panel'>{renderTasks(tasks)}</Card>
     </>
   );
 };

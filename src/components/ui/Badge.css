@@ -22,14 +22,14 @@
   }
 
   &.danger {
-    color: var(--background);
-    background-color: var(--danger);
+    color: var(--foreground);
+    background-color: color-mix(in srgb, var(--danger) 12%, var(--background));
     border-color: var(--danger);
   }
 
   &.success {
-    color: var(--background);
-    background-color: var(--success);
+    color: var(--foreground);
+    background-color: var(--background-success);
     border-color: var(--success);
   }
 }

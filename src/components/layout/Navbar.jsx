@@ -4,7 +4,7 @@ import './Navbar.css';
 
 export const Navbar = ({ logo, navLinks = [] }) => {
   return (
-    <nav className='navbar'>
+    <nav className='navbar container'>
       <div className='logo'>{logo}</div>
 
       {navLinks.length > 0 && (
