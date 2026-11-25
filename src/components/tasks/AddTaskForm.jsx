@@ -14,17 +14,11 @@ const DEFAULT_STATUS = 'To do';
 export const AddTaskForm = () => {
   const [title, setTitle] = useState('');
   const [showErrors, setShowErrors] = useState(false);
-
   const descriptionRef = useRef(null);
   const statusRef = useRef(null);
 
   const titleResult = validate(taskTitleSchema, title);
   const titleValidationError = titleResult.success ? '' : titleResult.error;
-
-  const handleTitleChange = e => {
-    const { value: newTitle } = e.target;
-    setTitle(newTitle);
-  };
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -45,13 +39,14 @@ export const AddTaskForm = () => {
 
   return (
     <form onSubmit={handleSubmit} className='add-task-form'>
+      {/* Title */}
       <div className='form-field'>
         <Label htmlFor='title'>Title</Label>
         <Input
           placeholder='Title'
           id='title'
           value={title}
-          onChange={handleTitleChange}
+          onChange={e => setTitle(e.target.value)}
           onBlur={() => setShowErrors(true)}
           aria-invalid={showErrors && !!titleValidationError}
           aria-describedby='title-error'
@@ -60,6 +55,8 @@ export const AddTaskForm = () => {
           {showErrors && titleValidationError}
         </FieldMessage>
       </div>
+
+      {/* Description */}
       <div className='form-field'>
         <Label htmlFor='description'>Description</Label>
         <Textarea
@@ -68,6 +65,8 @@ export const AddTaskForm = () => {
           id='description'
         />
       </div>
+
+      {/* Status */}
       <div className='form-field'>
         <Label htmlFor='status'>Status</Label>
         <Select ref={statusRef} id='status' defaultValue={DEFAULT_STATUS}>
@@ -80,7 +79,9 @@ export const AddTaskForm = () => {
       </div>
 
       <div className='buttons'>
-        <Button type='submit'>Add Task</Button>
+        <Button type='submit' disabled={!titleResult.success}>
+          Add Task
+        </Button>
       </div>
     </form>
   );
