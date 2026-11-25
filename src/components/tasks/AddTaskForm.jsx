@@ -52,6 +52,7 @@ export const AddTaskForm = () => {
           id='title'
           value={title}
           onChange={handleTitleChange}
+          onBlur={() => setShowErrors(true)}
           aria-invalid={showErrors && !!titleValidationError}
           aria-describedby='title-error'
         />
