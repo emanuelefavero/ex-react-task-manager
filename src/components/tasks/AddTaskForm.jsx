@@ -5,21 +5,11 @@ import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import { Select } from '@/components/ui/Select';
 import { Textarea } from '@/components/ui/Textarea';
+import { STATUS_OPTIONS } from '@/data/tasks';
+import { taskTitleSchema, validate } from '@/lib/validation';
 import './AddTaskForm.css';
 
-const STATUS_OPTIONS = ['To do', 'Doing', 'Done'];
-const DEFAULT_STATUS = STATUS_OPTIONS[0];
-const SYMBOLS = '!@#$%^&*()-_=+[]{}|;:\'",.<>?/`~';
-
-const validateTitle = title => {
-  const trimmedTitle = title.trim();
-
-  if (!trimmedTitle) return 'Title cannot be empty';
-  if ([...trimmedTitle].some(char => SYMBOLS.includes(char)))
-    return 'Title cannot contain special characters';
-
-  return '';
-};
+const DEFAULT_STATUS = 'To do';
 
 export const AddTaskForm = () => {
   const [title, setTitle] = useState('');
@@ -28,7 +18,8 @@ export const AddTaskForm = () => {
   const descriptionRef = useRef(null);
   const statusRef = useRef(null);
 
-  const titleValidationError = validateTitle(title);
+  const titleResult = validate(taskTitleSchema, title);
+  const titleValidationError = titleResult.success ? '' : titleResult.error;
 
   const handleTitleChange = e => {
     const { value: newTitle } = e.target;
@@ -38,13 +29,13 @@ export const AddTaskForm = () => {
   const handleSubmit = e => {
     e.preventDefault();
 
-    if (titleValidationError) {
+    if (!titleResult.success) {
       setShowErrors(true);
       return;
     }
 
     const task = {
-      title,
+      title: titleResult.data,
       description: descriptionRef.current.value,
       status: statusRef.current.value,
     };
