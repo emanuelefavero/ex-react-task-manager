@@ -1,3 +1,4 @@
+import { AddTaskForm } from '@/components/tasks/AddTaskForm';
 import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 
 const PAGE_TITLE = 'Add Task';
@@ -8,6 +9,7 @@ export const AddTask = () => {
   return (
     <>
       <h1>{PAGE_TITLE}</h1>
+      <AddTaskForm />
     </>
   );
 };

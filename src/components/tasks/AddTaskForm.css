@@ -1,0 +1,11 @@
+.add-task-form {
+  max-width: 40rem;
+  display: grid;
+  gap: 0.2rem;
+
+  .buttons {
+    margin-top: 1rem;
+    grid-column: 1 / -1;
+    justify-self: end;
+  }
+}
