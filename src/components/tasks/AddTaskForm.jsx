@@ -43,11 +43,15 @@ export const AddTaskForm = ({ heading }) => {
     try {
       await addTask(task);
     } catch (error) {
-      toast.error(error?.message ?? 'Error while adding task');
+      toast.error(`Error while adding task "${task.title}"`, {
+        description: error?.message,
+      });
       return;
     }
 
-    toast.success('Task added successfully');
+    toast.success('Task added successfully', {
+      description: `"${task.title}"`,
+    });
 
     // Reset form
     form.reset();
