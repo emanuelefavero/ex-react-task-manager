@@ -1,7 +1,16 @@
 import { useEffect, useState } from 'react';
-import { addTask as apiAddTask, fetchTasks } from '@/lib/api';
+import {
+  addTask as apiAddTask,
+  deleteTask as apiDeleteTask,
+  fetchTasks,
+} from '@/lib/api';
 
 const INITIAL_TASKS = { step: 'idle' };
+
+const checkTasksLoaded = tasks => {
+  if (tasks.step !== 'success')
+    throw new Error('Load the tasks before performing this action');
+};
 
 export const useTasks = () => {
   const [tasks, setTasks] = useState(INITIAL_TASKS);
@@ -36,21 +45,33 @@ export const useTasks = () => {
   }, []);
 
   const addTask = async newTask => {
-    if (tasks.step !== 'success')
-      throw new Error('Load the tasks before adding a task');
+    checkTasksLoaded(tasks);
 
     const response = await apiAddTask(newTask);
 
-    if (!response.success) {
+    if (!response.success)
       throw new Error(response.message ?? 'Error while adding task');
-    }
 
     setTasks(prev => ({
       step: 'success',
       data: [...prev.data, response.task],
     }));
   };
-  const removeTask = () => {};
+
+  const removeTask = async id => {
+    checkTasksLoaded(tasks);
+
+    const response = await apiDeleteTask(id);
+
+    if (!response.success)
+      throw new Error(response.message ?? `Error while deleting task ${id}`);
+
+    setTasks(prev => ({
+      step: 'success',
+      data: prev.data.filter(t => t.id !== id),
+    }));
+  };
+
   const updateTask = () => {};
 
   return { tasks, addTask, removeTask, updateTask };

@@ -13,6 +13,7 @@ const fetchJson = async (url, options) => {
 };
 
 export const fetchTasks = async () => fetchJson(`${API_URL}/tasks`);
+
 export const addTask = async task =>
   fetchJson(`${API_URL}/tasks`, {
     method: 'POST',
@@ -20,4 +21,9 @@ export const addTask = async task =>
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(task),
+  });
+
+export const deleteTask = async id =>
+  fetchJson(`${API_URL}/tasks/${id}`, {
+    method: 'DELETE',
   });

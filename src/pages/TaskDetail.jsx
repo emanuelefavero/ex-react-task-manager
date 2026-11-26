@@ -1,4 +1,5 @@
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
+import { toast } from 'sonner';
 import { TaskStatusBadge } from '@/components/tasks/TaskStatusBadge';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
@@ -6,11 +7,13 @@ import { Spinner } from '@/components/ui/Spinner';
 import { useGlobalContext } from '@/context/GlobalContext';
 import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { formatDate } from '@/lib/date';
+import { PATHS } from '@/router/paths';
 import './TaskDetail.css';
 
 export const TaskDetail = () => {
   const { id } = useParams();
-  const { tasks } = useGlobalContext();
+  const navigate = useNavigate();
+  const { tasks, removeTask } = useGlobalContext();
   const task = tasks.data?.find(t => t.id === Number(id));
   useDocumentTitle(task?.title);
 
@@ -24,6 +27,22 @@ export const TaskDetail = () => {
 
     case 'success':
       if (!task) return <h1>Task not found</h1>;
+
+      const handleRemoveTask = async () => {
+        try {
+          await removeTask(task.id);
+        } catch (error) {
+          toast.error(`Could not delete "${task.title}"`, {
+            description: error?.message,
+          });
+          return;
+        }
+
+        toast.success('Task deleted successfully', {
+          description: `"${task.title}"`,
+        });
+        navigate(PATHS.HOME);
+      };
 
       return (
         <Card as='article' className='task-detail'>
@@ -43,7 +62,7 @@ export const TaskDetail = () => {
             <div className='task-actions'>
               <Button
                 variant={Button.variant.danger}
-                onClick={() => console.log('Delete task', id)}
+                onClick={handleRemoveTask}
               >
                 Elimina Task
               </Button>
