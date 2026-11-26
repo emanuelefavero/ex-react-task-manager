@@ -1,23 +1,21 @@
 import { memo } from 'react';
-import { Badge } from '@/components/ui/Badge';
+import { Link } from 'react-router';
 import { formatDate } from '@/lib/date';
+import { getTaskDetailPath } from '@/router/paths';
+import { TaskStatusBadge } from './TaskStatusBadge';
 import './TaskRow.css';
 
-const statusBadgeVariant = {
-  'To do': Badge.variant.danger,
-  Doing: Badge.variant.warning,
-  Done: Badge.variant.success,
-};
-
 export const TaskRow = memo(
-  ({ title, status, createdAt }) =>
+  ({ id, title, status, createdAt }) =>
     title && (
       <tr className='task-row'>
-        <td>{title}</td>
         <td>
-          <Badge variant={statusBadgeVariant[status] ?? Badge.variant.default}>
-            {status}
-          </Badge>
+          <Link className='link' to={getTaskDetailPath(id)}>
+            {title}
+          </Link>
+        </td>
+        <td>
+          <TaskStatusBadge status={status} />
         </td>
         <td>{formatDate(createdAt)}</td>
       </tr>

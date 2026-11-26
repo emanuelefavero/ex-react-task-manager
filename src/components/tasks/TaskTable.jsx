@@ -15,6 +15,7 @@ export const TaskTable = ({ tasks }) =>
         {tasks.map(task => (
           <TaskRow
             key={task.id}
+            id={task.id}
             title={task.title}
             status={task.status}
             createdAt={task.createdAt}
