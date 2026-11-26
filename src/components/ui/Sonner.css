@@ -1,0 +1,36 @@
+.toast[data-sonner-toast] {
+  color: var(--foreground-muted);
+  background-color: var(--background-secondary);
+  border-color: var(--border);
+  border-radius: 0.5rem;
+  font-family: inherit;
+  font-size: 0.875rem;
+
+  &.success {
+    color: var(--foreground);
+    background-color: var(--background-success);
+    border-color: var(--success);
+  }
+
+  &.error {
+    color: var(--foreground);
+    background-color: var(--background-danger);
+    border-color: var(--danger);
+  }
+
+  &.warning {
+    color: var(--foreground);
+    background-color: var(--background-warning);
+    border-color: var(--warning);
+  }
+
+  &.info {
+    color: var(--foreground);
+    background-color: var(--background-muted);
+    border-color: var(--primary);
+  }
+
+  & .toast-title {
+    font-weight: 600;
+  }
+}

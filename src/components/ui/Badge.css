@@ -23,7 +23,7 @@
 
   &.danger {
     color: var(--foreground);
-    background-color: color-mix(in srgb, var(--danger) 12%, var(--background));
+    background-color: var(--background-danger);
     border-color: var(--danger);
   }
 

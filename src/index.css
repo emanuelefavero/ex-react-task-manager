@@ -8,6 +8,7 @@
   --background-outline: #fbfdff;
   --background-success: #e6f9f0;
   --background-warning: #fff4e5;
+  --background-danger: #f8e0e2;
   --primary: #3948ec;
   --primary-solid: #3948ec;
   --primary-solid-foreground: #fff;
@@ -27,6 +28,7 @@
     --background-outline: #12151d;
     --background-success: #003d1a;
     --background-warning: #3b2e00;
+    --background-danger: #29161c;
     --primary: #949dff;
     --success: #00c851;
     --warning: #bf9002;

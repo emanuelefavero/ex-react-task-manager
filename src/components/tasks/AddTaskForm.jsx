@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/Button';
 import { FieldMessage } from '@/components/ui/FieldMessage';
 import { Input } from '@/components/ui/Input';
@@ -41,11 +42,11 @@ export const AddTaskForm = () => {
     try {
       await addTask(task);
     } catch (error) {
-      alert(error?.message ?? 'Error while adding task');
+      toast.error(error?.message ?? 'Error while adding task');
       return;
     }
 
-    alert('Task added successfully');
+    toast.success('Task added successfully');
 
     // Reset form
     form.reset();
