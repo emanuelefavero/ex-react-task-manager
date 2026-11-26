@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/Button';
 import { cx } from '@/lib/utils';
 import './Dialog.css';
 
-export const Dialog = props => <DialogPrimitive.Root {...props} />;
+export const Dialog = ({ ...props }) => <DialogPrimitive.Root {...props} />;
 
 const DialogTrigger = ({ render = <Button />, ...props }) => (
   <DialogPrimitive.Trigger render={render} {...props} />
