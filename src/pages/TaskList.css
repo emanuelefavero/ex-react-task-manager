@@ -1,4 +1,5 @@
 .task-panel {
+  max-width: 65ch;
   display: flex;
   flex-direction: column;
   min-block-size: 14rem;

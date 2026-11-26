@@ -1,5 +1,5 @@
 .task-detail {
-  max-inline-size: 40rem;
+  max-inline-size: 65ch;
 
   .card-header {
     display: flex;
