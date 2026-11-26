@@ -3,7 +3,10 @@ import './Button.css';
 
 const buttonVariant = Object.freeze({
   primary: 'primary',
+  secondary: 'secondary',
+  outline: 'outline',
   danger: 'danger',
+  dangerMuted: 'dangerMuted',
   warning: 'warning',
   ghost: 'ghost',
 });
