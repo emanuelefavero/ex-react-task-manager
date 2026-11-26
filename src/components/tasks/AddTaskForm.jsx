@@ -18,6 +18,7 @@ export const AddTaskForm = ({ heading }) => {
   const { addTask } = useGlobalContext();
   const [title, setTitle] = useState('');
   const [showErrors, setShowErrors] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const descriptionRef = useRef(null);
   const statusRef = useRef(null);
 
@@ -26,6 +27,7 @@ export const AddTaskForm = ({ heading }) => {
 
   const handleSubmit = async e => {
     e.preventDefault();
+    if (isSubmitting) return;
 
     if (!titleResult.success) {
       setShowErrors(true);
@@ -39,6 +41,7 @@ export const AddTaskForm = ({ heading }) => {
     };
 
     const form = e.currentTarget;
+    setIsSubmitting(true);
 
     try {
       await addTask(task);
@@ -47,6 +50,8 @@ export const AddTaskForm = ({ heading }) => {
         description: error?.message,
       });
       return;
+    } finally {
+      setIsSubmitting(false);
     }
 
     toast.success('Task added successfully', {
@@ -112,8 +117,8 @@ export const AddTaskForm = ({ heading }) => {
         </div>
 
         <div className='form-actions'>
-          <Button type='submit' disabled={!titleResult.success}>
-            Add Task
+          <Button type='submit' disabled={isSubmitting || !titleResult.success}>
+            {isSubmitting ? 'Adding...' : 'Add Task'}
           </Button>
         </div>
       </Card.Content>
