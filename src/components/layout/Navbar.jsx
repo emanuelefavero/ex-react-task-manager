@@ -1,11 +1,14 @@
-import { NavLink } from 'react-router';
+import { Link, NavLink } from 'react-router';
 import { cx } from '@/lib/utils';
+import { PATHS } from '@/router/paths';
 import './Navbar.css';
 
 export const Navbar = ({ logo, navLinks = [] }) => {
   return (
     <nav className='navbar container'>
-      <div className='logo'>{logo}</div>
+      <Link to={PATHS.HOME} className='logo'>
+        {logo}
+      </Link>
 
       {navLinks.length > 0 && (
         <ul className='nav-links'>
