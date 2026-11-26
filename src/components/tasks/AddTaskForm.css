@@ -1,11 +1,24 @@
 .add-task-form {
-  max-width: 40rem;
-  display: grid;
-  gap: 0.2rem;
+  max-width: 65ch;
 
-  .buttons {
-    margin-top: 1rem;
-    grid-column: 1 / -1;
-    justify-self: end;
+  .card-header h1 {
+    font-size: clamp(1.25rem, 4vw, 1.5rem);
+    font-weight: 650;
+    line-height: 1.25;
+  }
+
+  .card-content {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .form-actions {
+    margin-top: 0.5rem;
+    display: flex;
+    justify-content: flex-end;
+
+    button {
+      min-width: 8rem;
+    }
   }
 }

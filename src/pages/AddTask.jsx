@@ -6,10 +6,5 @@ const PAGE_TITLE = 'Add Task';
 export const AddTask = () => {
   useDocumentTitle(PAGE_TITLE);
 
-  return (
-    <>
-      <h1>{PAGE_TITLE}</h1>
-      <AddTaskForm />
-    </>
-  );
+  return <AddTaskForm heading={PAGE_TITLE} />;
 };

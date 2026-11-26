@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/Button';
+import { Card } from '@/components/ui/Card';
 import { FieldMessage } from '@/components/ui/FieldMessage';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
@@ -13,7 +14,7 @@ import './AddTaskForm.css';
 
 const DEFAULT_STATUS = 'To do';
 
-export const AddTaskForm = () => {
+export const AddTaskForm = ({ heading }) => {
   const { addTask } = useGlobalContext();
   const [title, setTitle] = useState('');
   const [showErrors, setShowErrors] = useState(false);
@@ -55,51 +56,63 @@ export const AddTaskForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className='add-task-form'>
-      {/* Title */}
-      <div className='form-field'>
-        <Label htmlFor='title'>Title</Label>
-        <Input
-          placeholder='Title'
-          id='title'
-          value={title}
-          onChange={e => setTitle(e.target.value)}
-          onBlur={() => setShowErrors(true)}
-          aria-invalid={showErrors && !!titleValidationError}
-          aria-describedby='title-error'
-        />
-        <FieldMessage id='title-error' variant={FieldMessage.variant.danger}>
-          {showErrors && titleValidationError}
-        </FieldMessage>
-      </div>
+    <Card
+      as='form'
+      onSubmit={handleSubmit}
+      className='add-task-form'
+      aria-labelledby='add-task-heading'
+    >
+      <Card.Header>
+        <h1 id='add-task-heading'>{heading}</h1>
+      </Card.Header>
 
-      {/* Description */}
-      <div className='form-field'>
-        <Label htmlFor='description'>Description</Label>
-        <Textarea
-          ref={descriptionRef}
-          placeholder='Description'
-          id='description'
-        />
-      </div>
+      <Card.Content>
+        {/* Title */}
+        <div>
+          <Label htmlFor='title'>Title</Label>
+          <Input
+            placeholder='Title'
+            id='title'
+            value={title}
+            onChange={e => setTitle(e.target.value)}
+            onBlur={() => setShowErrors(true)}
+            aria-invalid={showErrors && !!titleValidationError}
+            aria-describedby='title-error'
+          />
+          <FieldMessage id='title-error' variant={FieldMessage.variant.danger}>
+            {showErrors && titleValidationError}
+          </FieldMessage>
+        </div>
 
-      {/* Status */}
-      <div className='form-field'>
-        <Label htmlFor='status'>Status</Label>
-        <Select ref={statusRef} id='status' defaultValue={DEFAULT_STATUS}>
-          {STATUS_OPTIONS.map(status => (
-            <option key={status} value={status}>
-              {status}
-            </option>
-          ))}
-        </Select>
-      </div>
+        {/* Description */}
+        <div>
+          <Label htmlFor='description'>Description</Label>
+          <Textarea
+            ref={descriptionRef}
+            placeholder='Description'
+            id='description'
+            rows={4}
+          />
+        </div>
 
-      <div className='buttons'>
-        <Button type='submit' disabled={!titleResult.success}>
-          Add Task
-        </Button>
-      </div>
-    </form>
+        {/* Status */}
+        <div>
+          <Label htmlFor='status'>Status</Label>
+          <Select ref={statusRef} id='status' defaultValue={DEFAULT_STATUS}>
+            {STATUS_OPTIONS.map(status => (
+              <option key={status} value={status}>
+                {status}
+              </option>
+            ))}
+          </Select>
+        </div>
+
+        <div className='form-actions'>
+          <Button type='submit' disabled={!titleResult.success}>
+            Add Task
+          </Button>
+        </div>
+      </Card.Content>
+    </Card>
   );
 };
