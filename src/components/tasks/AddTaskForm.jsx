@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import { Select } from '@/components/ui/Select';
 import { Textarea } from '@/components/ui/Textarea';
+import { useGlobalContext } from '@/context/GlobalContext';
 import { STATUS_OPTIONS } from '@/data/tasks';
 import { taskTitleSchema, validate } from '@/lib/validation';
 import './AddTaskForm.css';
@@ -12,6 +13,7 @@ import './AddTaskForm.css';
 const DEFAULT_STATUS = 'To do';
 
 export const AddTaskForm = () => {
+  const { addTask } = useGlobalContext();
   const [title, setTitle] = useState('');
   const [showErrors, setShowErrors] = useState(false);
   const descriptionRef = useRef(null);
@@ -20,7 +22,7 @@ export const AddTaskForm = () => {
   const titleResult = validate(taskTitleSchema, title);
   const titleValidationError = titleResult.success ? '' : titleResult.error;
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
 
     if (!titleResult.success) {
@@ -34,7 +36,21 @@ export const AddTaskForm = () => {
       status: statusRef.current.value,
     };
 
-    console.log('Task: ', task);
+    const form = e.currentTarget;
+
+    try {
+      await addTask(task);
+    } catch (error) {
+      alert(error?.message ?? 'Error while adding task');
+      return;
+    }
+
+    alert('Task added successfully');
+
+    // Reset form
+    form.reset();
+    setTitle('');
+    setShowErrors(false);
   };
 
   return (

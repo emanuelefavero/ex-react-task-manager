@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { fetchTasks } from '@/lib/api';
+import { addTask as apiAddTask, fetchTasks } from '@/lib/api';
 
 const INITIAL_TASKS = { step: 'idle' };
 
@@ -35,7 +35,21 @@ export const useTasks = () => {
     };
   }, []);
 
-  const addTask = () => {};
+  const addTask = async newTask => {
+    if (tasks.step !== 'success')
+      throw new Error('Load the tasks before adding a task');
+
+    const response = await apiAddTask(newTask);
+
+    if (!response.success) {
+      throw new Error(response.message ?? 'Error while adding task');
+    }
+
+    setTasks(prev => ({
+      step: 'success',
+      data: [...prev.data, response.task],
+    }));
+  };
   const removeTask = () => {};
   const updateTask = () => {};
 
