@@ -19,6 +19,7 @@ export const TaskDetail = () => {
   const task = tasks.data?.find(t => t.id === Number(id));
   useDocumentTitle(task?.title);
   const [showModal, setShowModal] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   switch (tasks.step) {
     case 'idle':
@@ -32,6 +33,8 @@ export const TaskDetail = () => {
       if (!task) return <h1>Task not found</h1>;
 
       const handleRemoveTask = async () => {
+        setIsDeleting(true);
+
         try {
           await removeTask(task.id);
         } catch (error) {
@@ -39,6 +42,8 @@ export const TaskDetail = () => {
             description: error?.message,
           });
           return;
+        } finally {
+          setIsDeleting(false);
         }
 
         toast.success('Task deleted successfully', {
@@ -76,7 +81,8 @@ export const TaskDetail = () => {
                 show={showModal}
                 onClose={() => setShowModal(false)}
                 onConfirm={handleRemoveTask}
-                confirmText='Delete task'
+                confirmText={isDeleting ? 'Deleting…' : 'Delete task'}
+                confirmDisabled={isDeleting}
               />
             </div>
           </Card.Content>

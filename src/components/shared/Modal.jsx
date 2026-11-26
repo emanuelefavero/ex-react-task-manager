@@ -11,6 +11,7 @@ export const Modal = ({
   onClose,
   onConfirm,
   confirmText = 'Confirm',
+  confirmDisabled = false,
 }) =>
   createPortal(
     <Dialog open={show} onOpenChange={open => !open && onClose()}>
@@ -23,7 +24,11 @@ export const Modal = ({
           <Dialog.Close render={<Button variant={Button.variant.outline} />}>
             Cancel
           </Dialog.Close>
-          <Button onClick={onConfirm} variant={Button.variant.danger}>
+          <Button
+            onClick={onConfirm}
+            variant={Button.variant.danger}
+            disabled={confirmDisabled}
+          >
             {confirmText}
           </Button>
         </Dialog.Actions>
