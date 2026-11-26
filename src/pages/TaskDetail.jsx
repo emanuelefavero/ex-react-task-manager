@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { toast } from 'sonner';
+import { Modal } from '@/components/shared/Modal';
 import { TaskStatusBadge } from '@/components/tasks/TaskStatusBadge';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
@@ -16,6 +18,7 @@ export const TaskDetail = () => {
   const { tasks, removeTask } = useGlobalContext();
   const task = tasks.data?.find(t => t.id === Number(id));
   useDocumentTitle(task?.title);
+  const [showModal, setShowModal] = useState(false);
 
   switch (tasks.step) {
     case 'idle':
@@ -62,10 +65,19 @@ export const TaskDetail = () => {
             <div className='task-actions'>
               <Button
                 variant={Button.variant.danger}
-                onClick={handleRemoveTask}
+                onClick={() => setShowModal(true)}
               >
                 Elimina Task
               </Button>
+
+              <Modal
+                title={`Delete "${task.title}"?`}
+                content={<p>Are you sure you want to delete the task?</p>}
+                show={showModal}
+                onClose={() => setShowModal(false)}
+                onConfirm={handleRemoveTask}
+                confirmText='Delete task'
+              />
             </div>
           </Card.Content>
         </Card>
