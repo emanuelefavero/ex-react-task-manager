@@ -1,6 +1,8 @@
 import { useMemo, useState } from 'react';
 import { TaskTable } from '@/components/tasks/TaskTable';
 import { Card } from '@/components/ui/Card';
+import { Input } from '@/components/ui/Input';
+import { Label } from '@/components/ui/Label';
 import { Spinner } from '@/components/ui/Spinner';
 import { useGlobalContext } from '@/context/GlobalContext';
 import { STATUS_OPTIONS } from '@/data/tasks';
@@ -17,11 +19,16 @@ export const TaskList = () => {
   const { tasks } = useGlobalContext();
   const [sortBy, setSortBy] = useState(DEFAULT_SORT_BY);
   const [sortOrder, setSortOrder] = useState(DEFAULT_SORT_ORDER);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const sortedTasks = useMemo(() => {
     if (tasks.step !== 'success') return [];
 
-    return tasks.data.toSorted((a, b) => {
+    const filteredTasks = tasks.data.filter(task =>
+      task.title.toLowerCase().includes(searchQuery.trim().toLowerCase()),
+    );
+
+    return filteredTasks.toSorted((a, b) => {
       switch (sortBy) {
         case 'title':
           return a.title.localeCompare(b.title) * sortOrder;
@@ -37,7 +44,7 @@ export const TaskList = () => {
           return createdAtDiff * sortOrder;
       }
     });
-  }, [tasks, sortBy, sortOrder]);
+  }, [tasks, sortBy, sortOrder, searchQuery]);
 
   const handleSort = column => {
     if (column === sortBy) {
@@ -60,7 +67,8 @@ export const TaskList = () => {
         return <p role='alert'>{tasks.error}</p>;
 
       case 'success':
-        if (!sortedTasks.length) return <p>No tasks available</p>;
+        if (tasks.data.length === 0) return <p>No tasks available</p>;
+        if (sortedTasks.length === 0) return <p>No tasks match your search</p>;
 
         return (
           <TaskTable
@@ -79,6 +87,21 @@ export const TaskList = () => {
   return (
     <>
       <h1>{PAGE_TITLE}</h1>
+
+      {tasks.step === 'success' && (
+        <div className='task-search'>
+          <Label htmlFor='search' srOnly>
+            Search tasks
+          </Label>
+          <Input
+            placeholder='Search tasks'
+            id='search'
+            value={searchQuery}
+            onChange={e => setSearchQuery(e.target.value)}
+          />
+        </div>
+      )}
+
       <Card className='task-panel'>{renderTasks()}</Card>
     </>
   );
