@@ -1,12 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useReducer } from 'react';
 import {
   addTask as apiAddTask,
   deleteTask as apiDeleteTask,
   updateTask as apiUpdateTask,
   fetchTasks,
 } from '@/lib/api';
-
-const INITIAL_TASKS = { step: 'idle' };
+import { ACTIONS, INITIAL_TASKS, tasksReducer } from '@/store/tasksReducer';
 
 const checkTasksLoaded = tasks => {
   if (tasks.step !== 'success')
@@ -25,25 +24,25 @@ const checkTaskAlreadyExists = (tasks, title, excludedId) => {
 };
 
 export const useTasks = () => {
-  const [tasks, setTasks] = useState(INITIAL_TASKS);
+  const [tasks, dispatch] = useReducer(tasksReducer, INITIAL_TASKS);
 
   useEffect(() => {
     let ignore = false;
 
     const loadTasks = async () => {
       try {
-        setTasks({ step: 'loading' });
+        dispatch({ type: ACTIONS.LOADING });
         const data = await fetchTasks();
 
         if (ignore) return;
 
         console.log('Tasks: ', data);
-        setTasks({ step: 'success', data });
+        dispatch({ type: ACTIONS.LOAD_TASKS, tasks: data });
       } catch (error) {
         if (ignore) return;
 
-        setTasks({
-          step: 'error',
+        dispatch({
+          type: ACTIONS.ERROR,
           error: error?.message ?? 'Error fetching tasks',
         });
       }
@@ -65,10 +64,18 @@ export const useTasks = () => {
     if (!response.success)
       throw new Error(response.message ?? 'Error while adding task');
 
-    setTasks(prev => ({
-      step: 'success',
-      data: [...prev.data, response.task],
-    }));
+    dispatch({ type: ACTIONS.ADD_TASK, task: response.task });
+  };
+
+  const removeTask = async id => {
+    checkTasksLoaded(tasks);
+
+    const response = await apiDeleteTask(id);
+
+    if (!response.success)
+      throw new Error(response.message ?? `Error while deleting task ${id}`);
+
+    dispatch({ type: ACTIONS.REMOVE_TASK, id });
   };
 
   const updateTask = async updatedTask => {
@@ -82,24 +89,7 @@ export const useTasks = () => {
     if (!response.success)
       throw new Error(response.message ?? `Error while updating task ${id}`);
 
-    setTasks(prev => ({
-      step: 'success',
-      data: prev.data.map(task => (task.id === id ? response.task : task)),
-    }));
-  };
-
-  const removeTask = async id => {
-    checkTasksLoaded(tasks);
-
-    const response = await apiDeleteTask(id);
-
-    if (!response.success)
-      throw new Error(response.message ?? `Error while deleting task ${id}`);
-
-    setTasks(prev => ({
-      step: 'success',
-      data: prev.data.filter(task => task.id !== id),
-    }));
+    dispatch({ type: ACTIONS.UPDATE_TASK, task: response.task });
   };
 
   const removeMultipleTasks = async taskIds => {
@@ -120,10 +110,7 @@ export const useTasks = () => {
     });
 
     if (deletedIds.length > 0) {
-      setTasks(prev => ({
-        step: 'success',
-        data: prev.data.filter(task => !deletedIds.includes(task.id)),
-      }));
+      dispatch({ type: ACTIONS.REMOVE_MULTIPLE_TASKS, deletedIds });
     }
 
     // If there are failed deletions, throw an error and pass the failedIds along with it so the caller knows which tasks were not deleted
