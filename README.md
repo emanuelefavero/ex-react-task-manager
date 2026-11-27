@@ -6,10 +6,20 @@ Esercizio finale di React avanzato, dal mio corso web dev (specializzazione Fron
 
 ## Sviluppo locale
 
-Per avviare l'applicazione in locale, clonare il repository ed eseguire i seguenti comandi:
+Clonare il [repository del backend](https://github.com/boolean-it/react-task-manager-back) ed eseguire nella sua cartella:
 
 ```bash
 npm install
+npm start
+```
+
+Il backend sarà in esecuzione su `http://localhost:3001`.
+
+In un altro terminale, dalla cartella di questo repository, eseguire il frontend:
+
+```bash
+npm install
+cp .env.example .env
 npm run dev
 ```
 
