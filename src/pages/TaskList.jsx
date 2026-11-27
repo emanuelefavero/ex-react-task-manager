@@ -1,5 +1,6 @@
-import { Trash } from 'lucide-react';
+import { LoaderCircle, Trash } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { toast } from 'sonner';
 import { TaskTable } from '@/components/tasks/TaskTable';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
@@ -18,13 +19,13 @@ const DEFAULT_SORT_ORDER = 1;
 
 export const TaskList = () => {
   useDocumentTitle();
-  const { tasks } = useGlobalContext();
+  const { tasks, removeMultipleTasks } = useGlobalContext();
   const [sortBy, setSortBy] = useState(DEFAULT_SORT_BY);
   const [sortOrder, setSortOrder] = useState(DEFAULT_SORT_ORDER);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedTaskIds, setSelectedTaskIds] = useState([]);
   const hasSelectedTasks = selectedTaskIds.length > 0;
-
+  const [isDeleting, setIsDeleting] = useState(false);
   const timeoutRef = useRef(null);
 
   // Debounced search handler using a timeout ref to delay updating the search query
@@ -89,6 +90,27 @@ export const TaskList = () => {
     [],
   );
 
+  const handleRemoveSelected = async () => {
+    setIsDeleting(true);
+
+    try {
+      await removeMultipleTasks(selectedTaskIds);
+      toast.success('Selected tasks deleted');
+      setSelectedTaskIds([]);
+    } catch (error) {
+      const failedIds = error.failedIds ?? [];
+
+      // Keep only the tasks that failed to delete in the selection
+      setSelectedTaskIds(prev => prev.filter(id => failedIds.includes(id)));
+
+      toast.error('Failed to delete some tasks', {
+        description: error.message,
+      });
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   const renderTasks = () => {
     switch (tasks.step) {
       case 'idle':
@@ -134,17 +156,17 @@ export const TaskList = () => {
           />
 
           <Button
-            variant={
-              !hasSelectedTasks ? Button.variant.danger : Button.variant.danger
-            }
-            onClick={() => {
-              // TODO: Implement delete selected functionality
-            }}
-            disabled={!hasSelectedTasks}
+            variant={Button.variant.danger}
+            onClick={handleRemoveSelected}
+            disabled={!hasSelectedTasks || isDeleting}
             aria-label='Delete selected tasks'
             title='Delete selected tasks'
           >
-            <Trash aria-hidden='true' />
+            {isDeleting ? (
+              <LoaderCircle aria-hidden='true' className='animate-spin' />
+            ) : (
+              <Trash aria-hidden='true' />
+            )}
           </Button>
         </div>
       )}

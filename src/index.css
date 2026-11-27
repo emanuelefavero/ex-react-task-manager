@@ -312,6 +312,11 @@ body {
   white-space: normal;
 }
 
+/* Animations */
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
 /* ANIMATIONS */
 @keyframes fade-in {
   from {
@@ -332,6 +337,12 @@ body {
 
   to {
     opacity: 1;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
   }
 }
 

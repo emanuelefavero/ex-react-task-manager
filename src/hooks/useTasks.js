@@ -88,5 +88,37 @@ export const useTasks = () => {
     }));
   };
 
-  return { tasks, addTask, removeTask, updateTask };
+  const removeMultipleTasks = async taskIds => {
+    checkTasksLoaded(tasks);
+
+    const results = await Promise.allSettled(
+      taskIds.map(id => apiDeleteTask(id)),
+    );
+
+    const deletedIds = [];
+    const failedIds = [];
+
+    results.forEach((result, index) => {
+      const id = taskIds[index];
+
+      if (result.status === 'fulfilled') deletedIds.push(id);
+      else failedIds.push(id);
+    });
+
+    if (deletedIds.length > 0) {
+      setTasks(prev => ({
+        step: 'success',
+        data: prev.data.filter(task => !deletedIds.includes(task.id)),
+      }));
+    }
+
+    // If there are failed deletions, throw an error and pass the deletedIds along with it so the caller knows which tasks were successfully deleted
+    if (failedIds.length > 0)
+      throw Object.assign(
+        new Error(`Failed to delete tasks: ${failedIds.join(', ')}`),
+        { failedIds },
+      );
+  };
+
+  return { tasks, addTask, removeTask, updateTask, removeMultipleTasks };
 };
