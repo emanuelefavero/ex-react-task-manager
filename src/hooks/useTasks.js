@@ -13,6 +13,17 @@ const checkTasksLoaded = tasks => {
     throw new Error('Load the tasks before performing this action');
 };
 
+const checkTaskAlreadyExists = (tasks, title, excludedId) => {
+  const normalizedTitle = title.trim().toLowerCase();
+
+  const exists = tasks.data.some(
+    task =>
+      task.id !== excludedId && // Exclude the task that we are modifying
+      task.title.trim().toLowerCase() === normalizedTitle,
+  );
+  if (exists) throw new Error(`Task with title "${title}" already exists`);
+};
+
 export const useTasks = () => {
   const [tasks, setTasks] = useState(INITIAL_TASKS);
 
@@ -47,6 +58,7 @@ export const useTasks = () => {
 
   const addTask = async newTask => {
     checkTasksLoaded(tasks);
+    checkTaskAlreadyExists(tasks, newTask.title);
 
     const response = await apiAddTask(newTask);
 
@@ -56,6 +68,23 @@ export const useTasks = () => {
     setTasks(prev => ({
       step: 'success',
       data: [...prev.data, response.task],
+    }));
+  };
+
+  const updateTask = async updatedTask => {
+    checkTasksLoaded(tasks);
+
+    const { id, title } = updatedTask;
+    checkTaskAlreadyExists(tasks, title, id);
+
+    const response = await apiUpdateTask(id, updatedTask);
+
+    if (!response.success)
+      throw new Error(response.message ?? `Error while updating task ${id}`);
+
+    setTasks(prev => ({
+      step: 'success',
+      data: prev.data.map(task => (task.id === id ? response.task : task)),
     }));
   };
 
@@ -69,22 +98,7 @@ export const useTasks = () => {
 
     setTasks(prev => ({
       step: 'success',
-      data: prev.data.filter(t => t.id !== id),
-    }));
-  };
-
-  const updateTask = async updatedTask => {
-    checkTasksLoaded(tasks);
-
-    const { id } = updatedTask;
-    const response = await apiUpdateTask(id, updatedTask);
-
-    if (!response.success)
-      throw new Error(response.message ?? `Error while updating task ${id}`);
-
-    setTasks(prev => ({
-      step: 'success',
-      data: prev.data.map(task => (task.id === id ? response.task : task)),
+      data: prev.data.filter(task => task.id !== id),
     }));
   };
 
