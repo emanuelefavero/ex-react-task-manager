@@ -1,7 +1,7 @@
-const dateFormatter = new Intl.DateTimeFormat('it-IT', {
-  day: '2-digit',
-  month: '2-digit',
-  year: 'numeric',
-});
+import dayjs from 'dayjs';
+import 'dayjs/locale/it';
 
-export const formatDate = value => dateFormatter.format(new Date(value));
+dayjs.locale('it');
+
+export const formatDate = (value, format = 'DD/MM/YYYY') =>
+  dayjs(value).format(format);
