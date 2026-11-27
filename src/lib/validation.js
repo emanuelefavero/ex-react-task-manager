@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { STATUS_OPTIONS } from '@/data/tasks';
 
-const SYMBOLS = '!@#$%^&*()-_=+[]{}|;:\'",.<>?/`~\\';
+const SYMBOLS = '!@#$%^&*()_=+[]{}|;:",<>?/`~\\';
 
 export const taskTitleSchema = z
   .string()
@@ -15,10 +15,12 @@ export const taskTitleSchema = z
 export const taskSchema = z.object({
   id: z.int().positive(),
   title: taskTitleSchema,
-  description: z.string().optional(),
+  description: z.string(),
   status: z.enum(STATUS_OPTIONS),
-  createdAt: z.date(),
+  createdAt: z.iso.datetime(),
 });
+
+export const tasksSchema = z.array(taskSchema);
 
 export const validate = (schema, data) => {
   const result = schema.safeParse(data);

@@ -1,4 +1,5 @@
 import { API_URL } from '@/config/env';
+import { tasksSchema, validate } from '@/lib/validation';
 
 const DELAY_MS = 300;
 const fakeDelay = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -18,7 +19,15 @@ const fetchJson = async (url, options) => {
   return response.json();
 };
 
-export const fetchTasks = async () => fetchJson(`${API_URL}/tasks`);
+export const fetchTasks = async () => {
+  const data = await fetchJson(`${API_URL}/tasks`);
+  const result = validate(tasksSchema, data);
+
+  if (!result.success)
+    throw new Error(`Invalid response from GET /tasks: ${result.error}`);
+
+  return result.data;
+};
 
 export const addTask = async task =>
   fetchJson(`${API_URL}/tasks`, {
