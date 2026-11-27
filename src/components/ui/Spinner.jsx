@@ -2,13 +2,15 @@ import { LoaderCircle } from 'lucide-react';
 import { cx } from '@/lib/utils';
 import './Spinner.css';
 
-export const Spinner = ({ className = '', ...props }) => (
-  <div className='spinner'>
+export const Spinner = ({ inline = false, className = '', ...props }) => {
+  const icon = (
     <LoaderCircle
-      className={cx('loader', className)}
+      className={cx('spinner-icon', className)}
       role='status'
       aria-label='Loading'
       {...props}
     />
-  </div>
-);
+  );
+
+  return inline ? icon : <div className='spinner'>{icon}</div>;
+};

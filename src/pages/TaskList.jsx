@@ -1,6 +1,7 @@
-import { LoaderCircle, Trash } from 'lucide-react';
+import { Trash } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { toast } from 'sonner';
+import { PendingButtonContent } from '@/components/shared/PendingButtonContent';
 import { TaskTable } from '@/components/tasks/TaskTable';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
@@ -169,11 +170,9 @@ export const TaskList = () => {
             aria-label='Delete selected tasks'
             title='Delete selected tasks'
           >
-            {isDeleting ? (
-              <LoaderCircle aria-hidden='true' className='animate-spin' />
-            ) : (
+            <PendingButtonContent pending={isDeleting} spinnerSize={24}>
               <Trash aria-hidden='true' />
-            )}
+            </PendingButtonContent>
           </Button>
         </div>
       )}

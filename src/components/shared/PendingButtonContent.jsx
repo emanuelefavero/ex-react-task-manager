@@ -1,11 +1,13 @@
-import { LoaderCircle } from 'lucide-react';
+import { Spinner } from '@/components/ui/Spinner';
 import './PendingButtonContent.css';
 
-export const PendingButtonContent = ({ pending, children }) => (
+export const PendingButtonContent = ({
+  pending,
+  spinnerSize = '1em',
+  children,
+}) => (
   <span className='pending-button-content' data-pending={pending || undefined}>
     <span>{children}</span>
-    {pending && (
-      <LoaderCircle size='1em' aria-hidden='true' className='animate-spin' />
-    )}
+    {pending && <Spinner inline size={spinnerSize} aria-hidden='true' />}
   </span>
 );

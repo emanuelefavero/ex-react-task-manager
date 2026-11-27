@@ -1,4 +1,5 @@
 .pending-button-content {
+  display: inline-grid;
   position: relative;
 
   &[data-pending] > span {
