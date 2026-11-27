@@ -1,0 +1,32 @@
+.checkbox {
+  display: inline-grid;
+  place-items: center;
+  flex-shrink: 0;
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+  border: 1px solid var(--foreground-muted);
+  border-radius: 0.25rem;
+  background-color: var(--background);
+  cursor: pointer;
+
+  &[data-checked],
+  &[data-indeterminate] {
+    border-color: var(--primary-solid);
+    background-color: var(--primary-solid);
+    color: var(--primary-solid-foreground);
+  }
+
+  &[aria-invalid='true'],
+  &[data-invalid] {
+    border-color: var(--danger);
+  }
+
+  &[data-disabled],
+  &[data-readonly] {
+    cursor: default;
+  }
+
+  &[data-disabled] {
+    opacity: 0.5;
+  }
+}
