@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { TaskTable } from '@/components/tasks/TaskTable';
 import { Card } from '@/components/ui/Card';
 import { Input } from '@/components/ui/Input';
@@ -20,6 +20,20 @@ export const TaskList = () => {
   const [sortBy, setSortBy] = useState(DEFAULT_SORT_BY);
   const [sortOrder, setSortOrder] = useState(DEFAULT_SORT_ORDER);
   const [searchQuery, setSearchQuery] = useState('');
+
+  const timeoutRef = useRef(null);
+
+  const debouncedSearch = useCallback(value => {
+    clearTimeout(timeoutRef.current);
+
+    timeoutRef.current = setTimeout(() => {
+      setSearchQuery(value);
+    }, 300);
+  }, []);
+
+  useEffect(() => {
+    return () => clearTimeout(timeoutRef.current);
+  }, []);
 
   const sortedTasks = useMemo(() => {
     if (tasks.step !== 'success') return [];
@@ -96,8 +110,7 @@ export const TaskList = () => {
           <Input
             placeholder='Search tasks'
             id='search'
-            value={searchQuery}
-            onChange={e => setSearchQuery(e.target.value)}
+            onChange={e => debouncedSearch(e.target.value)}
           />
         </div>
       )}
