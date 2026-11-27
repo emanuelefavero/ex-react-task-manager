@@ -1,0 +1,13 @@
+.pending-button-content {
+  position: relative;
+
+  &[data-pending] > span {
+    opacity: 0;
+  }
+
+  > svg {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+  }
+}

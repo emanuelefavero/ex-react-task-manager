@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import { Modal } from '@/components/shared/Modal';
+import { PendingButtonContent } from '@/components/shared/PendingButtonContent';
 import { Button } from '@/components/ui/Button';
 import { FieldMessage } from '@/components/ui/FieldMessage';
 import { Input } from '@/components/ui/Input';
@@ -103,7 +104,9 @@ export const EditTaskModal = ({ show, onClose, task, onSave, isSaving }) => {
       show={show}
       onClose={onClose}
       onConfirm={handleConfirm}
-      confirmText={isSaving ? 'Saving...' : 'Save'}
+      confirmText={
+        <PendingButtonContent pending={isSaving}>Save</PendingButtonContent>
+      }
       confirmDisabled={isSaving || !titleResult.success}
       confirmVariant={Button.variant.primary}
     />

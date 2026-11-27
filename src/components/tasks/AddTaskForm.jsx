@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import { toast } from 'sonner';
+import { PendingButtonContent } from '@/components/shared/PendingButtonContent';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { FieldMessage } from '@/components/ui/FieldMessage';
@@ -116,7 +117,9 @@ export const AddTaskForm = ({ heading }) => {
 
         <div className='form-actions'>
           <Button type='submit' disabled={isSubmitting || !titleResult.success}>
-            {isSubmitting ? 'Adding...' : 'Add Task'}
+            <PendingButtonContent pending={isSubmitting}>
+              Add Task
+            </PendingButtonContent>
           </Button>
         </div>
       </Card.Content>

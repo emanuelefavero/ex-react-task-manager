@@ -18,7 +18,7 @@
     justify-content: flex-end;
 
     button {
-      min-width: 8rem;
+      min-inline-size: 8rem;
     }
   }
 }

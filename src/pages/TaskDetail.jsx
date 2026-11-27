@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { toast } from 'sonner';
 import { Modal } from '@/components/shared/Modal';
+import { PendingButtonContent } from '@/components/shared/PendingButtonContent';
 import { EditTaskModal } from '@/components/tasks/EditTaskModal';
 import { TaskStatusBadge } from '@/components/tasks/TaskStatusBadge';
 import { Button } from '@/components/ui/Button';
@@ -123,7 +124,11 @@ export const TaskDetail = () => {
                 show={showModal}
                 onClose={() => setShowModal(false)}
                 onConfirm={handleRemoveTask}
-                confirmText={isDeleting ? 'Deleting…' : 'Delete task'}
+                confirmText={
+                  <PendingButtonContent pending={isDeleting}>
+                    Delete task
+                  </PendingButtonContent>
+                }
                 confirmDisabled={isDeleting}
               />
             </div>
