@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import {
   addTask as apiAddTask,
   deleteTask as apiDeleteTask,
+  updateTask as apiUpdateTask,
   fetchTasks,
 } from '@/lib/api';
 
@@ -72,7 +73,20 @@ export const useTasks = () => {
     }));
   };
 
-  const updateTask = () => {};
+  const updateTask = async updatedTask => {
+    checkTasksLoaded(tasks);
+
+    const { id } = updatedTask;
+    const response = await apiUpdateTask(id, updatedTask);
+
+    if (!response.success)
+      throw new Error(response.message ?? `Error while updating task ${id}`);
+
+    setTasks(prev => ({
+      step: 'success',
+      data: prev.data.map(task => (task.id === id ? response.task : task)),
+    }));
+  };
 
   return { tasks, addTask, removeTask, updateTask };
 };

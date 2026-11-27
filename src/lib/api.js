@@ -27,3 +27,12 @@ export const deleteTask = async id =>
   fetchJson(`${API_URL}/tasks/${id}`, {
     method: 'DELETE',
   });
+
+export const updateTask = (id, { title, description, status }) =>
+  fetchJson(`${API_URL}/tasks/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ title, description, status }),
+  });

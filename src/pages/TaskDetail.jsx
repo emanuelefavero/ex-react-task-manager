@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { toast } from 'sonner';
 import { Modal } from '@/components/shared/Modal';
+import { EditTaskModal } from '@/components/tasks/EditTaskModal';
 import { TaskStatusBadge } from '@/components/tasks/TaskStatusBadge';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
@@ -15,9 +16,11 @@ import './TaskDetail.css';
 export const TaskDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { tasks, removeTask } = useGlobalContext();
+  const { tasks, removeTask, updateTask } = useGlobalContext();
   const task = tasks.data?.find(t => t.id === Number(id));
   useDocumentTitle(task?.title);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -31,6 +34,24 @@ export const TaskDetail = () => {
 
     case 'success':
       if (!task) return <h1>Task not found</h1>;
+
+      const handleSaveTask = async updatedTask => {
+        setIsSaving(true);
+
+        try {
+          await updateTask(updatedTask);
+        } catch (error) {
+          toast.error(`Could not update "${updatedTask.title}"`, {
+            description: error?.message,
+          });
+          return;
+        } finally {
+          setIsSaving(false);
+        }
+
+        toast.success(`Task "${updatedTask.title}" updated successfully`);
+        setShowEditModal(false);
+      };
 
       const handleRemoveTask = async () => {
         setIsDeleting(true);
@@ -68,11 +89,31 @@ export const TaskDetail = () => {
               </time>
             </p>
             <div className='task-actions'>
+              {/* Edit Task Button and EditTaskModal */}
+              <Button
+                variant={Button.variant.primary}
+                onClick={() => setShowEditModal(true)}
+                disabled={isSaving}
+              >
+                Edit Task
+              </Button>
+
+              {showEditModal && (
+                <EditTaskModal
+                  show={showEditModal}
+                  onClose={() => setShowEditModal(false)}
+                  task={task}
+                  onSave={handleSaveTask}
+                  isSaving={isSaving}
+                />
+              )}
+
+              {/* Delete Task Button and Modal */}
               <Button
                 variant={Button.variant.danger}
                 onClick={() => setShowModal(true)}
               >
-                Elimina Task
+                Delete Task
               </Button>
 
               <Modal
