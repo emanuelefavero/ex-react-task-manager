@@ -119,21 +119,27 @@ export const TaskList = () => {
         return <Spinner aria-label='Loading tasks' />;
 
       case STEPS.ERROR:
-        return <p role='alert'>{tasks.error}</p>;
+        return (
+          <p className='task-list-error' role='alert'>
+            {tasks.error}
+          </p>
+        );
 
       case STEPS.SUCCESS:
         if (tasks.data.length === 0) return <p>No tasks available</p>;
         if (sortedTasks.length === 0) return <p>No tasks match your search</p>;
 
         return (
-          <TaskTable
-            tasks={sortedTasks}
-            sortBy={sortBy}
-            sortOrder={sortOrder}
-            onSort={handleSort}
-            selectedTaskIds={selectedTaskIds}
-            onToggle={toggleSelection}
-          />
+          <Card className='task-panel'>
+            <TaskTable
+              tasks={sortedTasks}
+              sortBy={sortBy}
+              sortOrder={sortOrder}
+              onSort={handleSort}
+              selectedTaskIds={selectedTaskIds}
+              onToggle={toggleSelection}
+            />
+          </Card>
         );
 
       default:
@@ -172,7 +178,7 @@ export const TaskList = () => {
         </div>
       )}
 
-      <Card className='task-panel'>{renderTasks()}</Card>
+      {renderTasks()}
     </>
   );
 };
