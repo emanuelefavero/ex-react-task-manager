@@ -17,6 +17,11 @@
     background-color: var(--background-muted);
     border-bottom: 1px solid var(--border);
     font-weight: 600;
+
+    /* Show sort icon only when column is sorted */
+    &:not([aria-sort]) .sort-icon {
+      visibility: hidden;
+    }
   }
 
   .task-sort-button {

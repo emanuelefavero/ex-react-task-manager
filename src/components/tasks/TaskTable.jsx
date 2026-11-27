@@ -32,13 +32,11 @@ export const TaskTable = ({ tasks, sortBy, sortOrder, onSort }) =>
                   onClick={() => onSort(key)}
                 >
                   {label}
-                  {isActive && (
-                    <SortIcon
-                      size={14}
-                      aria-hidden='true'
-                      className='sort-icon'
-                    />
-                  )}
+                  <SortIcon
+                    size={15}
+                    aria-hidden='true'
+                    className='sort-icon'
+                  />
                 </Button>
               </th>
             );
