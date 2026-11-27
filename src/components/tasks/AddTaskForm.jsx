@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/Label';
 import { Select } from '@/components/ui/Select';
 import { Textarea } from '@/components/ui/Textarea';
 import { useGlobalContext } from '@/context/GlobalContext';
-import { STATUS_OPTIONS, DEFAULT_STATUS } from '@/data/tasks';
+import { DEFAULT_STATUS, STATUS_OPTIONS } from '@/data/tasks';
 import { taskTitleSchema, validate } from '@/lib/validation';
 import './AddTaskForm.css';
 

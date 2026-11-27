@@ -1,11 +1,13 @@
 import { useRef, useState } from 'react';
 import { Modal } from '@/components/shared/Modal';
 import { Button } from '@/components/ui/Button';
+import { FieldMessage } from '@/components/ui/FieldMessage';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import { Select } from '@/components/ui/Select';
 import { Textarea } from '@/components/ui/Textarea';
 import { DEFAULT_STATUS, STATUS_OPTIONS } from '@/data/tasks';
+import { taskTitleSchema, validate } from '@/lib/validation';
 
 export const EditTaskModal = ({ show, onClose, task, onSave, isSaving }) => {
   const editFormRef = useRef(null);
@@ -14,8 +16,10 @@ export const EditTaskModal = ({ show, onClose, task, onSave, isSaving }) => {
     description: task.description ?? '',
     status: task.status ?? DEFAULT_STATUS,
   }));
+  const [showErrors, setShowErrors] = useState(false);
 
-  const title = formData.title.trim();
+  const titleResult = validate(taskTitleSchema, formData.title);
+  const titleValidationError = titleResult.success ? '' : titleResult.error;
 
   const handleChange = e => {
     const { name, value } = e.currentTarget;
@@ -27,10 +31,14 @@ export const EditTaskModal = ({ show, onClose, task, onSave, isSaving }) => {
 
   const handleSubmit = e => {
     e.preventDefault();
+    if (isSaving) return;
 
-    if (isSaving || !title) return;
+    if (!titleResult.success) {
+      setShowErrors(true);
+      return;
+    }
 
-    onSave({ id: task.id, ...formData, title });
+    onSave({ id: task.id, ...formData, title: titleResult.data });
   };
 
   const handleConfirm = () => editFormRef.current?.requestSubmit();
@@ -45,7 +53,16 @@ export const EditTaskModal = ({ show, onClose, task, onSave, isSaving }) => {
           placeholder='Title'
           value={formData.title}
           onChange={handleChange}
+          onBlur={() => setShowErrors(true)}
+          aria-invalid={showErrors && !!titleValidationError}
+          aria-describedby='edit-title-error'
         />
+        <FieldMessage
+          id='edit-title-error'
+          variant={FieldMessage.variant.danger}
+        >
+          {showErrors && titleValidationError}
+        </FieldMessage>
       </div>
 
       <div>
@@ -85,7 +102,7 @@ export const EditTaskModal = ({ show, onClose, task, onSave, isSaving }) => {
       onClose={onClose}
       onConfirm={handleConfirm}
       confirmText={isSaving ? 'Saving...' : 'Save'}
-      confirmDisabled={isSaving || !title}
+      confirmDisabled={isSaving || !titleResult.success}
       confirmVariant={Button.variant.primary}
     />
   );
