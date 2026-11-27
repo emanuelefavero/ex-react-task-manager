@@ -8,6 +8,7 @@ import { Select } from '@/components/ui/Select';
 import { Textarea } from '@/components/ui/Textarea';
 import { DEFAULT_STATUS, STATUS_OPTIONS } from '@/data/tasks';
 import { taskTitleSchema, validate } from '@/lib/validation';
+import './EditTaskModal.css';
 
 export const EditTaskModal = ({ show, onClose, task, onSave, isSaving }) => {
   const editFormRef = useRef(null);
@@ -44,7 +45,7 @@ export const EditTaskModal = ({ show, onClose, task, onSave, isSaving }) => {
   const handleConfirm = () => editFormRef.current?.requestSubmit();
 
   const editTaskForm = (
-    <form ref={editFormRef} onSubmit={handleSubmit}>
+    <form className='edit-task-form' ref={editFormRef} onSubmit={handleSubmit}>
       <div>
         <Label htmlFor='edit-title'>Title</Label>
         <Input
@@ -71,6 +72,7 @@ export const EditTaskModal = ({ show, onClose, task, onSave, isSaving }) => {
           id='edit-description'
           name='description'
           placeholder='Description'
+          rows={3}
           value={formData.description}
           onChange={handleChange}
         />
