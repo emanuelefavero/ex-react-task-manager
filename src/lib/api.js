@@ -43,7 +43,7 @@ export const deleteTask = async id =>
     method: 'DELETE',
   });
 
-export const updateTask = (id, { title, description, status }) =>
+export const updateTask = async (id, { title, description, status }) =>
   fetchJson(`${API_URL}/tasks/${id}`, {
     method: 'PUT',
     headers: {
