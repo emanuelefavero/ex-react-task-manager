@@ -112,7 +112,7 @@ export const useTasks = () => {
       }));
     }
 
-    // If there are failed deletions, throw an error and pass the deletedIds along with it so the caller knows which tasks were successfully deleted
+    // If there are failed deletions, throw an error and pass the failedIds along with it so the caller knows which tasks were not deleted
     if (failedIds.length > 0)
       throw Object.assign(
         new Error(`Failed to delete tasks: ${failedIds.join(', ')}`),
