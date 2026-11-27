@@ -11,6 +11,7 @@ import { useGlobalContext } from '@/context/GlobalContext';
 import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { formatDate } from '@/lib/date';
 import { PATHS } from '@/router/paths';
+import { STEPS } from '@/store/tasksReducer';
 import './TaskDetail.css';
 
 export const TaskDetail = () => {
@@ -25,14 +26,14 @@ export const TaskDetail = () => {
   const [isDeleting, setIsDeleting] = useState(false);
 
   switch (tasks.step) {
-    case 'idle':
-    case 'loading':
+    case STEPS.IDLE:
+    case STEPS.LOADING:
       return <Spinner aria-label='Loading task' />;
 
-    case 'error':
+    case STEPS.ERROR:
       return <p role='alert'>{tasks.error}</p>;
 
-    case 'success':
+    case STEPS.SUCCESS:
       if (!task) return <h1>Task not found</h1>;
 
       const handleSaveTask = async updatedTask => {

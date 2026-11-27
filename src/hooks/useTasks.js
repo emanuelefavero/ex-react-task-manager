@@ -5,10 +5,10 @@ import {
   updateTask as apiUpdateTask,
   fetchTasks,
 } from '@/lib/api';
-import { ACTIONS, INITIAL_TASKS, tasksReducer } from '@/store/tasksReducer';
+import { ACTIONS, STEPS, INITIAL_TASKS, tasksReducer } from '@/store/tasksReducer';
 
 const checkTasksLoaded = tasks => {
-  if (tasks.step !== 'success')
+  if (tasks.step !== STEPS.SUCCESS)
     throw new Error('Load the tasks before performing this action');
 };
 

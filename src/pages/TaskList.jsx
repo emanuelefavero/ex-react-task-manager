@@ -10,6 +10,7 @@ import { Spinner } from '@/components/ui/Spinner';
 import { useGlobalContext } from '@/context/GlobalContext';
 import { STATUS_OPTIONS } from '@/data/tasks';
 import { useDocumentTitle } from '@/hooks/useDocumentTitle';
+import { STEPS } from '@/store/tasksReducer';
 import './TaskList.css';
 
 const PAGE_TITLE = `Task List`;
@@ -44,7 +45,7 @@ export const TaskList = () => {
 
   // Calculate sorted and filtered tasks based on search query and sort options
   const sortedTasks = useMemo(() => {
-    if (tasks.step !== 'success') return [];
+    if (tasks.step !== STEPS.SUCCESS) return [];
 
     const filteredTasks = tasks.data.filter(task =>
       task.title.toLowerCase().includes(searchQuery.trim().toLowerCase()),
@@ -113,14 +114,14 @@ export const TaskList = () => {
 
   const renderTasks = () => {
     switch (tasks.step) {
-      case 'idle':
-      case 'loading':
+      case STEPS.IDLE:
+      case STEPS.LOADING:
         return <Spinner aria-label='Loading tasks' />;
 
-      case 'error':
+      case STEPS.ERROR:
         return <p role='alert'>{tasks.error}</p>;
 
-      case 'success':
+      case STEPS.SUCCESS:
         if (tasks.data.length === 0) return <p>No tasks available</p>;
         if (sortedTasks.length === 0) return <p>No tasks match your search</p>;
 
@@ -144,7 +145,7 @@ export const TaskList = () => {
     <>
       <h1>{PAGE_TITLE}</h1>
 
-      {tasks.step === 'success' && (
+      {tasks.step === STEPS.SUCCESS && (
         <div className='task-action-bar'>
           <Label htmlFor='search' srOnly>
             Search tasks

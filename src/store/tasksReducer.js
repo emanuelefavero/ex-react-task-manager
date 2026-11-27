@@ -1,4 +1,4 @@
-const STEPS = Object.freeze({
+export const STEPS = Object.freeze({
   IDLE: 'idle',
   LOADING: 'loading',
   ERROR: 'error',
