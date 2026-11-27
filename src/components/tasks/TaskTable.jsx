@@ -9,7 +9,14 @@ const SORTABLE_COLUMNS = [
   { key: 'createdAt', label: 'Created At' },
 ];
 
-export const TaskTable = ({ tasks, sortBy, sortOrder, onSort }) =>
+export const TaskTable = ({
+  tasks,
+  sortBy,
+  sortOrder,
+  onSort,
+  selectedTaskIds,
+  onToggle,
+}) =>
   tasks?.length > 0 && (
     <table className='task-table'>
       <thead>
@@ -51,6 +58,8 @@ export const TaskTable = ({ tasks, sortBy, sortOrder, onSort }) =>
             title={task.title}
             status={task.status}
             createdAt={task.createdAt}
+            checked={selectedTaskIds.includes(task.id)}
+            onToggle={onToggle}
           />
         ))}
       </tbody>

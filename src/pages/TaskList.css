@@ -1,9 +1,16 @@
-.task-search {
-  max-width: 35ch;
+.task-action-bar {
+  max-inline-size: 65ch;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  .button {
+    flex-shrink: 0;
+  }
 }
 
 .task-panel {
-  max-width: 65ch;
+  max-inline-size: 65ch;
   display: flex;
   flex-direction: column;
   min-block-size: 14rem;

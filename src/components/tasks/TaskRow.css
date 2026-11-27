@@ -12,6 +12,12 @@
     overflow-wrap: anywhere;
   }
 
+  .task-row-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
   > :last-child {
     font-variant-numeric: tabular-nums;
   }

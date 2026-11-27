@@ -1,5 +1,7 @@
+import { Trash } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { TaskTable } from '@/components/tasks/TaskTable';
+import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
@@ -20,9 +22,12 @@ export const TaskList = () => {
   const [sortBy, setSortBy] = useState(DEFAULT_SORT_BY);
   const [sortOrder, setSortOrder] = useState(DEFAULT_SORT_ORDER);
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedTaskIds, setSelectedTaskIds] = useState([]);
+  const hasSelectedTasks = selectedTaskIds.length > 0;
 
   const timeoutRef = useRef(null);
 
+  // Debounced search handler using a timeout ref to delay updating the search query
   const debouncedSearch = useCallback(value => {
     clearTimeout(timeoutRef.current);
 
@@ -31,10 +36,12 @@ export const TaskList = () => {
     }, 300);
   }, []);
 
+  // Cleanup timeout on component unmount to prevent memory leaks
   useEffect(() => {
     return () => clearTimeout(timeoutRef.current);
   }, []);
 
+  // Calculate sorted and filtered tasks based on search query and sort options
   const sortedTasks = useMemo(() => {
     if (tasks.step !== 'success') return [];
 
@@ -71,6 +78,17 @@ export const TaskList = () => {
     setSortOrder(DEFAULT_SORT_ORDER);
   };
 
+  const toggleSelection = useCallback(
+    taskId =>
+      setSelectedTaskIds(
+        prev =>
+          prev.includes(taskId) // Is task selected?
+            ? prev.filter(id => id !== taskId) // Deselect it
+            : [...prev, taskId], // Select it
+      ),
+    [],
+  );
+
   const renderTasks = () => {
     switch (tasks.step) {
       case 'idle':
@@ -90,6 +108,8 @@ export const TaskList = () => {
             sortBy={sortBy}
             sortOrder={sortOrder}
             onSort={handleSort}
+            selectedTaskIds={selectedTaskIds}
+            onToggle={toggleSelection}
           />
         );
 
@@ -103,7 +123,7 @@ export const TaskList = () => {
       <h1>{PAGE_TITLE}</h1>
 
       {tasks.step === 'success' && (
-        <div className='task-search'>
+        <div className='task-action-bar'>
           <Label htmlFor='search' srOnly>
             Search tasks
           </Label>
@@ -112,6 +132,20 @@ export const TaskList = () => {
             id='search'
             onChange={e => debouncedSearch(e.target.value)}
           />
+
+          <Button
+            variant={
+              !hasSelectedTasks ? Button.variant.danger : Button.variant.danger
+            }
+            onClick={() => {
+              // TODO: Implement delete selected functionality
+            }}
+            disabled={!hasSelectedTasks}
+            aria-label='Delete selected tasks'
+            title='Delete selected tasks'
+          >
+            <Trash aria-hidden='true' />
+          </Button>
         </div>
       )}
 
